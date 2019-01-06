@@ -7,7 +7,7 @@ import sys, os
 from collections import OrderedDict
 from copy import deepcopy
 from time import time
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import pickle
 import sys, getopt
 from models import prodlda, nvlda

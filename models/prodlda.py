@@ -5,7 +5,7 @@ import sys, os
 from collections import OrderedDict
 from copy import deepcopy
 from time import time
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import pickle
 def xavier_init(fan_in, fan_out, constant=1):
     low = -constant*np.sqrt(6.0/(fan_in + fan_out))
