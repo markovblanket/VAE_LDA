@@ -119,14 +119,13 @@ class VAE(object):
 
         ''' E_{q(theta|w;mu_0,Sigma_0)q(z|w;phi)}[log q(z|theta)]'''        
         theta_expand=tf.expand_dims(self.layer_do_0,-1)
-        self.t_z_p_loss=tf.reduce_sum(tf.matmul(self.phi,theta_expand))   
+        t_z_p_loss=tf.reduce_sum(tf.matmul(self.phi,theta_expand))   
 
         ''' E_q(z|w;phi)[log q(z|w;phi)]'''
-        self.z_z_q_loss=tf.reduce_sum(self.phi*tf.log(self.phi))
+        z_z_q_loss=tf.reduce_sum(self.phi*tf.log(self.phi))
 
         ''' E_{q(theta,z|w)}{log p(w|z,theta)}'''
-        self.recons_loss=tf.reduce_sum(tf.multiply(self.x,tf.matrix_diag_part(tf.tensordot(self.phi,tf.log(self.beta),axes=((2),(0))))))
-        # self.trace_monitor=tf.tensordot(self.phi,tf.log(self.beta),axes=((2),(0)))
+        recons_loss=tf.reduce_sum(tf.multiply(self.x,tf.matrix_diag_part(tf.tensordot(self.phi,tf.log(self.beta),axes=((2),(0))))))
 
         ''' E_{q(theta|w)}{log (p(theta|w)/q(theta|w))}'''             
         latent_loss = 0.5*( tf.reduce_sum(tf.div(self.sigma,self.var2),1)+\
@@ -139,7 +138,8 @@ class VAE(object):
             
 
         # self.cost = tf.reduce_mean(reconstr_loss) + tf.reduce_mean(latent_loss) # average over batch
-        self.cost = tf.reduce_mean(-self.recons_loss-self.t_z_p_loss+self.z_z_q_loss) + tf.reduce_mean(latent_loss) # average over batch
+        # self.cost = tf.reduce_mean(-self.recons_loss-self.t_z_p_loss+self.z_z_q_loss) + tf.reduce_mean(latent_loss) # average over batch
+        self.cost = tf.reduce_mean(-recons_loss-t_z_p_loss+z_z_q_loss+latent_loss) # average over batch
 
 
         self.optimizer = \

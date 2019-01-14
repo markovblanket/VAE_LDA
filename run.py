@@ -134,7 +134,7 @@ def calcPerp(model):
 m = 'nvlda'
 f = 100
 s = 100
-t = 50
+t = 5
 b = 200
 r = 1e-4
 e = 300
