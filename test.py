@@ -3,26 +3,56 @@ import pickle
 import os
 import tensorflow as tf
 
+
+def onehot(data, min_length):
+    return np.bincount(data, minlength=min_length)
+
 vocab = 'data/20news_clean/vocab.pkl'
 dataset_tr = 'data/20news_clean/train.txt.npy'
 data_tr = np.load(dataset_tr, encoding = 'latin1')
 vocab_content= np.load(vocab, encoding = 'latin1')
 mydict = {'george':16,'amber':19}
+doc_len=[len(data_tr[k]) for k in range(len(data_tr))]
+vocab_size=len(vocab_content)
+
+data_tr = np.array([onehot(doc.astype('int'),vocab_size) for doc in data_tr if np.sum(doc)!=0])
+
+A=np.array([1,2,3])
+B=np.array([[1,2,1],[2,3,5],[4,5,6]])
+vec_1=tf.constant([[[1,1,1],[2,2,2]],[[3,3,3],[4,5,1]]], dtype=tf.float32)
+vec_2=tf.constant([[2,1,1]],dtype=tf.float32)
+with tf.Session() as sess:
+	print(sess.run(tf.nn.softmax(vec_1)))
+	print(sess.run(tf.matrix_diag_part(vec_1)))
+# print('A',A)
+# print('B',B)
+# print ('multiply',np.multiply(A,np.diag(B)))
+# C=np.multiply(A,np.diag(B))
+# print ('output',np.multiply(A,np.diag(B)))
+# print ('sum',np.sum(C))
+
+# C=np.tensordot(A,B,axes=((1),(0)))
+# print('A',A)
+# print('B',B[0,:,:])
+# print('C',C[0,:,:])
+# print(np.trace(A))
+# print(data_tr.shape)
+# print(len(np.bincount(data_tr[6], minlength=len(vocab_content))))
 
 # print(data_tr[0])
 # for word in data_tr[0]:
 # 	print(list(vocab_content.keys())[list(vocab_content.values()).index(word)])
-idx=50
-data_to_show=data_tr[idx]
-my_str=[list(vocab_content.keys())[list(vocab_content.values()).index(word)] for word in data_to_show]	
-h_dim=50
-a = 1*np.ones((1 , h_dim)).astype(np.float32)
-mu2 = (np.log(a).T-np.mean(np.log(a),1)).T
-var2 = ( ( (1.0/a)*( 1 - (2.0/h_dim) ) ).T +
-	( 1.0/(h_dim*h_dim) )*np.sum(1.0/a,1) ).T  
-print('a',a)
-print('mu2',mu2)
-print('var2',var2)
+# idx=50
+# data_to_show=data_tr[idx]
+# my_str=[list(vocab_content.keys())[list(vocab_content.values()).index(word)] for word in data_to_show]	
+# h_dim=50
+# a = 1*np.ones((1 , h_dim)).astype(np.float32)
+# mu2 = (np.log(a).T-np.mean(np.log(a),1)).T
+# var2 = ( ( (1.0/a)*( 1 - (2.0/h_dim) ) ).T +
+# 	( 1.0/(h_dim*h_dim) )*np.sum(1.0/a,1) ).T  
+# print('a',a)
+# print('mu2',mu2)
+# print('var2',var2)
 
 
 # print(' '.join(my_str))

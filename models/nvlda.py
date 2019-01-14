@@ -75,11 +75,13 @@ class VAE(object):
             'h1': tf.get_variable('h1',[n_input, n_hidden_recog_1]),
             'h2': tf.get_variable('h2',[n_hidden_recog_1, n_hidden_recog_2]),
             'out_mean': tf.get_variable('out_mean',[n_hidden_recog_2, n_z]),
+            'phi': tf.Variable(tf.zeros([n_input,n_input,n_z], dtype=tf.float32)),
             'out_log_sigma': tf.get_variable('out_log_sigma',[n_hidden_recog_2, n_z])}
         all_weights['biases_recog'] = {
             'b1': tf.Variable(tf.zeros([n_hidden_recog_1], dtype=tf.float32)),
             'b2': tf.Variable(tf.zeros([n_hidden_recog_2], dtype=tf.float32)),
             'out_mean': tf.Variable(tf.zeros([n_z], dtype=tf.float32)),
+            'phi': tf.Variable(tf.zeros([n_input,n_z], dtype=tf.float32)),
             'out_log_sigma': tf.Variable(tf.zeros([n_z], dtype=tf.float32))}
         all_weights['weights_gener'] = {
             'h2': tf.Variable(xavier_init(n_z, n_hidden_gener_1))}
@@ -90,6 +92,9 @@ class VAE(object):
                                            biases['b1']))
         layer_2 = self.transfer_fct(tf.add(tf.matmul(layer_1, weights['h2']),
                                            biases['b2']))
+        layer_3 = self.transfer_fct(tf.add(tf.tensordot(self.x, weights['phi'],axes=((1),(0))),
+                                           biases['phi'])) 
+        self.phi=tf.nn.softmax(layer_3)
         layer_do = tf.nn.dropout(layer_2, self.keep_prob)
 
         z_mean = tf.contrib.layers.batch_norm(tf.add(tf.matmul(layer_do, weights['out_mean']),
@@ -102,27 +107,48 @@ class VAE(object):
 
     def _generator_network(self,z, weights):
         self.layer_do_0 = tf.nn.dropout(tf.nn.softmax(z), self.keep_prob)
+        # '''sampled theta'''
+        # self.theta_l=self.layer_do_0
+        self.beta=tf.nn.softmax(tf.contrib.layers.batch_norm(weights['h2']))        
         x_reconstr_mean = tf.add(tf.matmul(self.layer_do_0, tf.nn.softmax(tf.contrib.layers.batch_norm(weights['h2']))),0.0)
         return x_reconstr_mean
 
     def _create_loss_optimizer(self):
         self.x_reconstr_mean+=1e-10
-        reconstr_loss = \
-            -tf.reduce_sum(self.x * tf.log(self.x_reconstr_mean),1)#/tf.reduce_sum(self.x,1)
+        self.phi+=1e-10
 
+        ''' E_{q(theta|w;mu_0,Sigma_0)q(z|w;phi)}[log q(z|theta)]'''        
+        theta_expand=tf.expand_dims(self.layer_do_0,-1)
+        self.t_z_p_loss=tf.reduce_sum(tf.matmul(self.phi,theta_expand))   
+
+        ''' E_q(z|w;phi)[log q(z|w;phi)]'''
+        self.z_z_q_loss=tf.reduce_sum(self.phi*tf.log(self.phi))
+
+        ''' E_{q(theta,z|w)}{log p(w|z,theta)}'''
+        self.recons_loss=tf.reduce_sum(tf.multiply(self.x,tf.matrix_diag_part(tf.tensordot(self.phi,tf.log(self.beta),axes=((2),(0))))))
+        # self.trace_monitor=tf.tensordot(self.phi,tf.log(self.beta),axes=((2),(0)))
+
+        ''' E_{q(theta|w)}{log (p(theta|w)/q(theta|w))}'''             
         latent_loss = 0.5*( tf.reduce_sum(tf.div(self.sigma,self.var2),1)+\
         tf.reduce_sum( tf.multiply(tf.div((self.mu2 - self.z_mean),self.var2),
                   (self.mu2 - self.z_mean)),1) - self.h_dim +\
                            tf.reduce_sum(tf.log(self.var2),1)  - tf.reduce_sum(self.z_log_sigma_sq  ,1) )
 
-        self.cost = tf.reduce_mean(reconstr_loss) + tf.reduce_mean(latent_loss) # average over batch
+        # reconstr_loss = \
+        #     -tf.reduce_sum(self.x * tf.log(self.x_reconstr_mean),1)#/tf.reduce_sum(self.x,1)
+            
+
+        # self.cost = tf.reduce_mean(reconstr_loss) + tf.reduce_mean(latent_loss) # average over batch
+        self.cost = tf.reduce_mean(-self.recons_loss-self.t_z_p_loss+self.z_z_q_loss) + tf.reduce_mean(latent_loss) # average over batch
 
 
         self.optimizer = \
             tf.train.AdamOptimizer(learning_rate=self.learning_rate,beta1=0.99).minimize(self.cost)
 
-    def partial_fit(self, X):
+    def partial_fit(self, X):                
         opt, cost,emb = self.sess.run((self.optimizer, self.cost,self.network_weights['weights_gener']['h2']),feed_dict={self.x: X,self.keep_prob: .75})
+        # print('trace_monitor',trace_monitor)        
+        # self.sess.run((self.layer_3_print),feed_dict={self.x: X,self.keep_prob: .75})
         return cost,emb
 
     def test(self, X):
