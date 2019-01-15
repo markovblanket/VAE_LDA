@@ -116,31 +116,37 @@ class VAE(object):
     def _create_loss_optimizer(self):
         self.x_reconstr_mean+=1e-10
         self.phi+=1e-10
-
-        ''' E_{q(theta|w;mu_0,Sigma_0)q(z|w;phi)}[log q(z|theta)]'''        
-        theta_expand=tf.expand_dims(self.layer_do_0,-1)
-        t_z_p_loss=tf.reduce_sum(tf.matmul(self.phi,theta_expand))   
+        ''' E_{q(theta|w;mu_0,Sigma_0)q(z|w;phi)}[log p(z|theta)]'''        
+        theta_expand=tf.expand_dims(self.layer_do_0,-1)+1e-10
+        t_z_p_loss=tf.reduce_sum(tf.matmul(self.phi,tf.log(theta_expand)),[1,2])   
+        print ('t_z_p_loss',t_z_p_loss.get_shape())        
 
         ''' E_q(z|w;phi)[log q(z|w;phi)]'''
-        z_z_q_loss=tf.reduce_sum(self.phi*tf.log(self.phi))
+        z_z_q_loss=tf.reduce_sum(self.phi*tf.log(self.phi),[1,2])
+        print ('z_z_q_loss',z_z_q_loss.get_shape())        
 
         ''' E_{q(theta,z|w)}{log p(w|z,theta)}'''
-        recons_loss=tf.reduce_sum(tf.multiply(self.x,tf.matrix_diag_part(tf.tensordot(self.phi,tf.log(self.beta),axes=((2),(0))))))
-
+        # reconstr_loss = -tf.reduce_sum(self.x * tf.log(self.x_reconstr_mean),1)#/tf.reduce_sum(self.x,1)
+        # print ('reconstr_loss_original',reconstr_loss.get_shape())        
+        # recons_loss=tf.reduce_sum(tf.multiply(self.x,tf.matrix_diag_part(tf.tensordot(self.phi,tf.log(self.beta),axes=((2),(0))))))
+        recons_loss=tf.reduce_sum(tf.multiply(self.phi,tf.transpose(tf.log(self.beta))),2)
+        recons_loss=tf.reduce_sum(self.x*recons_loss,1)
+        print ('reconstr_loss_mine',recons_loss.get_shape())
         ''' E_{q(theta|w)}{log (p(theta|w)/q(theta|w))}'''             
         latent_loss = 0.5*( tf.reduce_sum(tf.div(self.sigma,self.var2),1)+\
         tf.reduce_sum( tf.multiply(tf.div((self.mu2 - self.z_mean),self.var2),
                   (self.mu2 - self.z_mean)),1) - self.h_dim +\
                            tf.reduce_sum(tf.log(self.var2),1)  - tf.reduce_sum(self.z_log_sigma_sq  ,1) )
-
+        print ('latent_loss',latent_loss.get_shape())
         # reconstr_loss = \
         #     -tf.reduce_sum(self.x * tf.log(self.x_reconstr_mean),1)#/tf.reduce_sum(self.x,1)
             
 
         # self.cost = tf.reduce_mean(reconstr_loss) + tf.reduce_mean(latent_loss) # average over batch
         # self.cost = tf.reduce_mean(-self.recons_loss-self.t_z_p_loss+self.z_z_q_loss) + tf.reduce_mean(latent_loss) # average over batch
-        self.cost = tf.reduce_mean(-recons_loss-t_z_p_loss+z_z_q_loss+latent_loss) # average over batch
 
+        self.cost = tf.reduce_mean(-recons_loss-t_z_p_loss+z_z_q_loss+latent_loss) # average over batch
+        # self.cost=tf.reduce_mean(latent_loss)
 
         self.optimizer = \
             tf.train.AdamOptimizer(learning_rate=self.learning_rate,beta1=0.99).minimize(self.cost)
