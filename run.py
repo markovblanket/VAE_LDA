@@ -92,10 +92,14 @@ def train(network_architecture, minibatches, type='prodlda',learning_rate=0.001,
     for epoch in range(training_epochs):
         avg_cost = 0.
         total_batch = int(n_samples_tr / batch_size)
+        vae.epoch_count+=1
+        if vae.epoch_count%100==1:
+          vae.learning_rate*=0.8
         # Loop over all batches
         for i in range(total_batch):
             # batch_xs = minibatches.next()
-            batch_xs = next(minibatches)
+            # batch_xs = next(minibatches)
+            batch_xs=np.array([data_tr[k] for k in range(2)])
             # Fit training using batch data
             cost,emb = vae.partial_fit(batch_xs)
             # Compute average loss
@@ -110,7 +114,7 @@ def train(network_architecture, minibatches, type='prodlda',learning_rate=0.001,
         # Display logs per epoch step
         if epoch % display_step == 0:
             print ("Epoch:", '%04d' % (epoch+1), \
-                  "cost=", "{:.9f}".format(avg_cost))
+                  "cost=", "{:.9f}".format(avg_cost),'recons_lost',vae.reconstr_loss_,'latent_loss',vae.latent_loss_)
     return vae,emb
 
 def print_top_words(beta, feature_names, n_top_words=10):
@@ -136,8 +140,8 @@ f = 100
 s = 100
 t = 50
 b = 200
-r = 1e-4
-e = 300
+r = 1.25e-4
+e = 3000
 
 minibatches = create_minibatch(docs_tr.astype('float32'))
 network_architecture,batch_size,learning_rate=make_network(f,s,t,b,r)

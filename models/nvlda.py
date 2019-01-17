@@ -29,6 +29,7 @@ class VAE(object):
         self.transfer_fct = transfer_fct
         self.learning_rate = learning_rate
         self.batch_size = batch_size
+        self.epoch_count=0
         '''----------------Inputs----------------'''
         self.x = tf.placeholder(tf.float32, [None, network_architecture["n_input"]])
         self.keep_prob = tf.placeholder(tf.float32)
@@ -92,37 +93,41 @@ class VAE(object):
                                            biases['b2']))
         layer_do = tf.nn.dropout(layer_2, self.keep_prob)
 
-        z_mean = tf.contrib.layers.batch_norm(tf.add(tf.matmul(layer_do, weights['out_mean']),
-                        biases['out_mean']))
+        # z_mean = tf.contrib.layers.batch_norm(tf.add(tf.matmul(layer_do, weights['out_mean']),
+        #                 biases['out_mean']))
+        z_mean = tf.add(tf.matmul(layer_do, weights['out_mean']),
+                        biases['out_mean'])
+
         z_log_sigma_sq = \
-            tf.contrib.layers.batch_norm(tf.add(tf.matmul(layer_do, weights['out_log_sigma']),
-                   biases['out_log_sigma']))
+            tf.add(tf.matmul(layer_do, weights['out_log_sigma']),
+                   biases['out_log_sigma'])
 
         return (z_mean, z_log_sigma_sq)
 
     def _generator_network(self,z, weights):
         self.layer_do_0 = tf.nn.dropout(tf.nn.softmax(z), self.keep_prob)
-        x_reconstr_mean = tf.add(tf.matmul(self.layer_do_0, tf.nn.softmax(tf.contrib.layers.batch_norm(weights['h2']))),0.0)
+        # x_reconstr_mean = tf.add(tf.matmul(self.layer_do_0, tf.nn.softmax(tf.contrib.layers.batch_norm(weights['h2']))),0.0)
+        x_reconstr_mean = tf.add(tf.matmul(self.layer_do_0, tf.nn.softmax(weights['h2'])),0.0)
         return x_reconstr_mean
 
     def _create_loss_optimizer(self):
         self.x_reconstr_mean+=1e-10
-        reconstr_loss = \
+        self.reconstr_loss = \
             -tf.reduce_sum(self.x * tf.log(self.x_reconstr_mean),1)#/tf.reduce_sum(self.x,1)
 
-        latent_loss = 0.5*( tf.reduce_sum(tf.div(self.sigma,self.var2),1)+\
+        self.latent_loss = 0.5*( tf.reduce_sum(tf.div(self.sigma,self.var2),1)+\
         tf.reduce_sum( tf.multiply(tf.div((self.mu2 - self.z_mean),self.var2),
                   (self.mu2 - self.z_mean)),1) - self.h_dim +\
                            tf.reduce_sum(tf.log(self.var2),1)  - tf.reduce_sum(self.z_log_sigma_sq  ,1) )
 
-        self.cost = tf.reduce_mean(reconstr_loss) + tf.reduce_mean(latent_loss) # average over batch
+        self.cost = tf.reduce_mean(self.reconstr_loss) + tf.reduce_mean(self.latent_loss) # average over batch
 
 
         self.optimizer = \
             tf.train.AdamOptimizer(learning_rate=self.learning_rate,beta1=0.99).minimize(self.cost)
 
     def partial_fit(self, X):
-        opt, cost,emb = self.sess.run((self.optimizer, self.cost,self.network_weights['weights_gener']['h2']),feed_dict={self.x: X,self.keep_prob: .75})
+        opt, cost,emb,self.reconstr_loss_,self.latent_loss_ = self.sess.run((self.optimizer, self.cost,self.network_weights['weights_gener']['h2'],self.reconstr_loss,self.latent_loss),feed_dict={self.x: X,self.keep_prob: 1})
         return cost,emb
 
     def test(self, X):
