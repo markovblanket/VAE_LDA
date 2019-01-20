@@ -35,7 +35,7 @@ class VAE(object):
         self.keep_prob = tf.placeholder(tf.float32)
 
         '''-------Constructing Laplace Approximation to Dirichlet Prior--------------'''
-        self.h_dim = float(network_architecture["n_z"])
+        # self.h_dim = float(network_architecture["n_z"])
         self.h_dim = int(network_architecture["n_z"])
         print('h_dim: ',self.h_dim)
         self.a = 1*np.ones((1 , self.h_dim)).astype(np.float32)
@@ -46,7 +46,7 @@ class VAE(object):
         # Create autoencoder network
         self._create_network()
         self._create_loss_optimizer()
-        init = tf.initialize_all_variables()
+        init = tf.global_variables_initializer()
         self.sess = tf.InteractiveSession()
         self.sess.run(init)
 

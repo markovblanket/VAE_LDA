@@ -32,6 +32,7 @@ print ('Dim Training Data',data_tr.shape)
 print ('Dim Test Data',data_te.shape)
 '''-----------------------------'''
 
+print('len_data_tr',np.sum(data_tr[0]))
 '''--------------Global Params---------------'''
 n_samples_tr = data_tr.shape[0]
 n_samples_te = data_te.shape[0]
@@ -93,28 +94,34 @@ def train(network_architecture, minibatches, type='prodlda',learning_rate=0.001,
         avg_cost = 0.
         total_batch = int(n_samples_tr / batch_size)
         vae.epoch_count+=1
-        if vae.epoch_count%100==1:
-          vae.learning_rate*=0.8
-        # Loop over all batches
-        for i in range(total_batch):
-            # batch_xs = minibatches.next()
-            # batch_xs = next(minibatches)
-            batch_xs=np.array([data_tr[k] for k in range(2)])
-            # Fit training using batch data
-            cost,emb = vae.partial_fit(batch_xs)
-            # Compute average loss
-            avg_cost += cost / n_samples_tr * batch_size
+        batch_xs=np.array([data_tr[k] for k in range(batch_size)])
+        # Fit training using batch data
+        cost,emb = vae.partial_fit(batch_xs)
 
-            if np.isnan(avg_cost):
-                print (epoch,i,np.sum(batch_xs,1).astype(np.int),batch_xs.shape)
-                print ('Encountered NaN, stopping training. Please check the learning_rate settings and the momentum.')
-                # return vae,emb
-                sys.exit()
+        if vae.epoch_count%500==1:
+          vae.learning_rate*=0.9
+
+        avg_cost = cost 
+        # Loop over all batches
+        # for i in range(total_batch):
+        #     # batch_xs = minibatches.next()
+        #     # batch_xs = next(minibatches)
+        #     batch_xs=np.array([data_tr[k] for k in range(30)])
+        #     # Fit training using batch data
+        #     cost,emb = vae.partial_fit(batch_xs)
+        #     # Compute average loss
+        #     # avg_cost += cost / n_samples_tr * batch_size
+        #     avg_cost = cost 
+        #     if np.isnan(avg_cost):
+        #         print (epoch,i,np.sum(batch_xs,1).astype(np.int),batch_xs.shape)
+        #         print ('Encountered NaN, stopping training. Please check the learning_rate settings and the momentum.')
+        #         # return vae,emb
+        #         sys.exit()
 
         # Display logs per epoch step
         if epoch % display_step == 0:
             print ("Epoch:", '%04d' % (epoch+1), \
-                  "cost=", "{:.9f}".format(avg_cost),'recons_lost',vae.reconstr_loss_,'latent_loss',vae.latent_loss_)
+                  "cost=", "{:.9f}".format(avg_cost),'learning_rate',vae.learning_rate)
     return vae,emb
 
 def print_top_words(beta, feature_names, n_top_words=10):
@@ -135,81 +142,81 @@ def calcPerp(model):
 
 
 
-m = 'nvlda'
-f = 100
-s = 100
-t = 50
-b = 200
-r = 1.25e-4
-e = 3000
+# m = 'nvlda'
+# f = 100
+# s = 100
+# t = 50
+# b = 200
+# r = 1.25e-4
+# e = 3000
 
-minibatches = create_minibatch(docs_tr.astype('float32'))
-network_architecture,batch_size,learning_rate=make_network(f,s,t,b,r)
-print (network_architecture)
+# minibatches = create_minibatch(docs_tr.astype('float32'))
+# network_architecture,batch_size,learning_rate=make_network(f,s,t,b,r)
+# print (network_architecture)
 
-vae,emb = train(network_architecture, minibatches,m, training_epochs=e,batch_size=batch_size,learning_rate=learning_rate)
-print_top_words(emb, list(zip(*sorted(vocab.items(), key=lambda x: x[1])))[0])
-calcPerp(vae)    
+# vae,emb = train(network_architecture, minibatches,m, training_epochs=e,batch_size=batch_size,learning_rate=learning_rate)
+# print_top_words(emb, list(zip(*sorted(vocab.items(), key=lambda x: x[1])))[0])
+# calcPerp(vae)    
 
-# def main(argv):
-#     m = ''
-#     f = ''
-#     s = ''
-#     t = ''
-#     b = ''
-#     r = ''
-#     e = ''
-#     try:
-#       opts, args = getopt.getopt(argv,"hpnm:f:s:t:b:r:,e:",["default=","model=","layer1=","layer2=","num_topics=","batch_size=","learning_rate=","training_epochs"])
-#     except getopt.GetoptError:
-#         print ('CUDA_VISIBLE_DEVICES=0 python run.py -m <model> -f <#units> -s <#units> -t <#topics> -b <batch_size> -r <learning_rate [0,1] -e <training_epochs>')
-#         sys.exit(2)
-#     for opt, arg in opts:
-#         if opt == '-h':
-#             print ('CUDA_VISIBLE_DEVICES=0 python run.py -m <model> -f <#units> -s <#units> -t <#topics> -b <batch_size> -r <learning_rate [0,1]> -e <training_epochs>')
-#             sys.exit()
-#         elif opt == '-p':
-#             print ('Running with the Default settings for prodLDA...')
-#             print ('CUDA_VISIBLE_DEVICES=0 python run.py -m prodlda -f 100 -s 100 -t 50 -b 200 -r 0.002 -e 100')
-#             m='prodlda'
-#             f=100
-#             s=100
-#             t=50
-#             b=200
-#             r=0.002
-#             e=100
-#         elif opt == '-n':
-#             print ('Running with the Default settings for NVLDA...')
-#             print ('CUDA_VISIBLE_DEVICES=0 python run.py -m nvlda -f 100 -s 100 -t 50 -b 200 -r 0.005 -e 300')
-#             m='nvlda'
-#             f=100
-#             s=100
-#             t=50
-#             b=200
-#             r=0.01
-#             e=300
-#         elif opt == "-m":
-#             m=arg
-#         elif opt == "-f":
-#             f=int(arg)
-#         elif opt == "-s":
-#             s=int(arg)
-#         elif opt == "-t":
-#             t=int(arg)
-#         elif opt == "-b":
-#             b=int(arg)
-#         elif opt == "-r":
-#             r=float(arg)
-#         elif opt == "-e":
-#             e=int(arg)
+def main(argv):
+    m = ''
+    f = ''
+    s = ''
+    t = ''
+    b = ''
+    r = ''
+    e = ''
+    try:
+      opts, args = getopt.getopt(argv,"hpnm:f:s:t:b:r:,e:",["default=","model=","layer1=","layer2=","num_topics=","batch_size=","learning_rate=","training_epochs"])
+    except getopt.GetoptError:
+        print ('CUDA_VISIBLE_DEVICES=0 python run.py -m <model> -f <#units> -s <#units> -t <#topics> -b <batch_size> -r <learning_rate [0,1] -e <training_epochs>')
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt == '-h':
+            print ('CUDA_VISIBLE_DEVICES=0 python run.py -m <model> -f <#units> -s <#units> -t <#topics> -b <batch_size> -r <learning_rate [0,1]> -e <training_epochs>')
+            sys.exit()
+        elif opt == '-p':
+            print ('Running with the Default settings for prodLDA...')
+            print ('CUDA_VISIBLE_DEVICES=0 python run.py -m prodlda -f 100 -s 100 -t 50 -b 200 -r 0.002 -e 100')
+            m='prodlda'
+            f=100
+            s=100
+            t=50
+            b=200
+            r=0.002
+            e=100
+        elif opt == '-n':
+            print ('Running with the Default settings for NVLDA...')
+            print ('CUDA_VISIBLE_DEVICES=0 python run.py -m nvlda -f 100 -s 100 -t 50 -b 200 -r 0.005 -e 300')
+            m='nvlda'
+            f=100
+            s=100
+            t=50
+            b=200
+            r=0.01
+            e=300
+        elif opt == "-m":
+            m=arg
+        elif opt == "-f":
+            f=int(arg)
+        elif opt == "-s":
+            s=int(arg)
+        elif opt == "-t":
+            t=int(arg)
+        elif opt == "-b":
+            b=int(arg)
+        elif opt == "-r":
+            r=float(arg)
+        elif opt == "-e":
+            e=int(arg)
 
-#     minibatches = create_minibatch(docs_tr.astype('float32'))
-#     network_architecture,batch_size,learning_rate=make_network(f,s,t,b,r)
-#     print (network_architecture)
-#     print (opts)
-#     vae,emb = train(network_architecture, minibatches,m, training_epochs=e,batch_size=batch_size,learning_rate=learning_rate)
-#     print_top_words(emb, list(zip(*sorted(vocab.items(), key=lambda x: x[1])))[0])
-#     calcPerp(vae)
+    minibatches = create_minibatch(docs_tr.astype('float32'))
+    network_architecture,batch_size,learning_rate=make_network(f,s,t,b,r)
+    print (network_architecture)
+    print (opts)
+    vae,emb = train(network_architecture, minibatches,m, training_epochs=e,batch_size=batch_size,learning_rate=learning_rate)
+    print_top_words(emb, list(zip(*sorted(vocab.items(), key=lambda x: x[1])))[0])
+    calcPerp(vae)
 
-# if __name__ == "__main__":
-#    main(sys.argv[1:])
+if __name__ == "__main__":
+   main(sys.argv[1:])

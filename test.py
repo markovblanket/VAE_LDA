@@ -13,16 +13,17 @@ mydict = {'george':16,'amber':19}
 # for word in data_tr[0]:
 # 	print(list(vocab_content.keys())[list(vocab_content.values()).index(word)])
 idx=50
-data_to_show=data_tr[idx]
-my_str=[list(vocab_content.keys())[list(vocab_content.values()).index(word)] for word in data_to_show]	
-h_dim=50
-a = 1*np.ones((1 , h_dim)).astype(np.float32)
-mu2 = (np.log(a).T-np.mean(np.log(a),1)).T
-var2 = ( ( (1.0/a)*( 1 - (2.0/h_dim) ) ).T +
-	( 1.0/(h_dim*h_dim) )*np.sum(1.0/a,1) ).T  
-print('a',a)
-print('mu2',mu2)
-print('var2',var2)
+# data_to_show=data_tr[idx]
+print (len(data_tr))
+# my_str=[list(vocab_content.keys())[list(vocab_content.values()).index(word)] for word in data_to_show]	
+# h_dim=50
+# a = 1*np.ones((1 , h_dim)).astype(np.float32)
+# mu2 = (np.log(a).T-np.mean(np.log(a),1)).T
+# var2 = ( ( (1.0/a)*( 1 - (2.0/h_dim) ) ).T +
+# 	( 1.0/(h_dim*h_dim) )*np.sum(1.0/a,1) ).T  
+# print('a',a)
+# print('mu2',mu2)
+# print('var2',var2)
 
 
 # print(' '.join(my_str))
