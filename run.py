@@ -94,23 +94,23 @@ def train(network_architecture, minibatches, type='prodlda',learning_rate=0.001,
         avg_cost = 0.
         total_batch = int(n_samples_tr / batch_size)
         vae.epoch_count+=1
-        batch_xs=np.array([data_tr[k] for k in range(batch_size)])
+#        batch_xs=np.array([data_tr[k] for k in range(batch_size)])
         # Fit training using batch data
-        cost,emb = vae.partial_fit(batch_xs)
+       # cost,emb = vae.partial_fit(batch_xs)
+    #    print('batch_xs_size:',batch_xs.shape)
+        if vae.epoch_count%50==1:
+          vae.learning_rate*=0.5
 
-        if vae.epoch_count%500==1:
-          vae.learning_rate*=0.9
-
-        avg_cost = cost 
+        #avg_cost = cost 
         # Loop over all batches
-        # for i in range(total_batch):
-        #     # batch_xs = minibatches.next()
+        for i in range(total_batch):
+        	batch_xs = minibatches.next()
         #     # batch_xs = next(minibatches)
         #     batch_xs=np.array([data_tr[k] for k in range(30)])
         #     # Fit training using batch data
-        #     cost,emb = vae.partial_fit(batch_xs)
+                cost,emb = vae.partial_fit(batch_xs)
         #     # Compute average loss
-        #     # avg_cost += cost / n_samples_tr * batch_size
+                avg_cost += cost / n_samples_tr * batch_size
         #     avg_cost = cost 
         #     if np.isnan(avg_cost):
         #         print (epoch,i,np.sum(batch_xs,1).astype(np.int),batch_xs.shape)
