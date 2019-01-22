@@ -76,13 +76,16 @@ class VAE(object):
             'h1': tf.get_variable('h1',[n_input, n_hidden_recog_1]),
             'h2': tf.get_variable('h2',[n_hidden_recog_1, n_hidden_recog_2]),
             'out_mean': tf.get_variable('out_mean',[n_hidden_recog_2, n_z]),
-            'phi': tf.Variable(tf.zeros([n_input,n_input,n_z], dtype=tf.float32)),
+            'phi1': tf.get_variable('phi1',[n_input,5]),                        
+            # 'phi2': tf.Variable(tf.zeros([n_input,n_input,n_z], dtype=tf.float32)),            
+            'phi2': tf.get_variable('phi2',[5,n_input,n_z]),
             'out_log_sigma': tf.get_variable('out_log_sigma',[n_hidden_recog_2, n_z])}
         all_weights['biases_recog'] = {
             'b1': tf.Variable(tf.zeros([n_hidden_recog_1], dtype=tf.float32)),
             'b2': tf.Variable(tf.zeros([n_hidden_recog_2], dtype=tf.float32)),
             'out_mean': tf.Variable(tf.zeros([n_z], dtype=tf.float32)),
-            'phi': tf.Variable(tf.zeros([n_input,n_z], dtype=tf.float32)),
+            'phi1': tf.Variable(tf.zeros([5], dtype=tf.float32)),
+            'phi2': tf.Variable(tf.zeros([n_input,n_z], dtype=tf.float32)),
             'out_log_sigma': tf.Variable(tf.zeros([n_z], dtype=tf.float32))}
         all_weights['weights_gener'] = {
             'h2': tf.Variable(xavier_init(n_z, n_hidden_gener_1))}
@@ -93,9 +96,18 @@ class VAE(object):
                                            biases['b1']))
         layer_2 = self.transfer_fct(tf.add(tf.matmul(layer_1, weights['h2']),
                                            biases['b2']))
-        layer_3 = self.transfer_fct(tf.add(tf.tensordot(self.x, weights['phi'],axes=((1),(0))),
-                                           biases['phi'])) 
-        self.phi=tf.nn.softmax(layer_3)
+        # layer_3 = self.transfer_fct(tf.add(tf.tensordot(self.x, weights['phi'],axes=((1),(0))),
+        #                                    biases['phi'])) 
+        layer_3 = self.transfer_fct(tf.add(tf.matmul(self.x, weights['phi1']),
+                                           biases['phi1']))
+
+        layer_4 = self.transfer_fct(tf.add(tf.tensordot(layer_3, weights['phi2'],axes=((1),(0))),
+                                           biases['phi2'])) 
+        print('layer_4_shape',layer_4.get_shape())
+
+
+        self.phi=tf.nn.softmax(layer_4)
+        print('new_phi',self.phi.get_shape())
         layer_do = tf.nn.dropout(layer_2, self.keep_prob)
 
         z_mean = tf.add(tf.matmul(layer_do, weights['out_mean']),

@@ -134,21 +134,21 @@ def calcPerp(model):
 
 
 
-m = 'nvlda'
-f = 100
-s = 100
-t = 5
-b = 200
-r = 1e-4
-e = 300
+# m = 'nvlda'
+# f = 100
+# s = 100
+# t = 5
+# b = 200
+# r = 1e-4
+# e = 300
 
-minibatches = create_minibatch(docs_tr.astype('float32'))
-network_architecture,batch_size,learning_rate=make_network(f,s,t,b,r)
-print (network_architecture)
+# minibatches = create_minibatch(docs_tr.astype('float32'))
+# network_architecture,batch_size,learning_rate=make_network(f,s,t,b,r)
+# print (network_architecture)
 
-vae,emb = train(network_architecture, minibatches,m, training_epochs=e,batch_size=batch_size,learning_rate=learning_rate)
-print_top_words(emb, list(zip(*sorted(vocab.items(), key=lambda x: x[1])))[0])
-calcPerp(vae)    
+# vae,emb = train(network_architecture, minibatches,m, training_epochs=e,batch_size=batch_size,learning_rate=learning_rate)
+# print_top_words(emb, list(zip(*sorted(vocab.items(), key=lambda x: x[1])))[0])
+# calcPerp(vae)    
 
 def main(argv):
     m = ''
