@@ -110,9 +110,9 @@ class VAE(object):
         print('new_phi',self.phi.get_shape())
         layer_do = tf.nn.dropout(layer_2, self.keep_prob)
 
-        z_mean = tf.add(tf.matmul(layer_do, weights['out_mean']),
-                        biases['out_mean'])
-        z_log_sigma_sq = tf.add(tf.matmul(layer_do, weights['out_log_sigma']),biases['out_log_sigma'])
+        z_mean = tf.contrib.layers.batch_norm(tf.add(tf.matmul(layer_do, weights['out_mean']),
+                        biases['out_mean']))
+        z_log_sigma_sq =tf.contrib.layers.batch_norm(tf.add(tf.matmul(layer_do, weights['out_log_sigma']),biases['out_log_sigma']))
 
         return (z_mean, z_log_sigma_sq)
 
@@ -120,7 +120,7 @@ class VAE(object):
         self.layer_do_0 = tf.nn.dropout(tf.nn.softmax(z), self.keep_prob)
         # '''sampled theta'''
         # self.theta_l=self.layer_do_0
-        self.beta=tf.nn.softmax(weights['h2'])       
+        self.beta=tf.nn.softmax(tf.contrib.layers.batch_norm(weights['h2']))       
         x_reconstr_mean = tf.add(tf.matmul(self.layer_do_0, tf.nn.softmax(weights['h2'])),0.0)
         return x_reconstr_mean
 
