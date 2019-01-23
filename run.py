@@ -49,15 +49,19 @@ network_architecture = \
 '''-----------------------------'''
 
 '''--------------Netowrk Architecture and settings---------------'''
-
-def make_network(layer1=100,layer2=100,num_topics=50,bs=200,eta=0.002):
+def make_network(layer1=100,layer2=100,num_topics=50,bs=200,eta=0.002,keeping_prob=0.75,z_batch_norm_flag=1,beta_batch_norm_flag=1,phi_batch_norm_flag=1):
     tf.reset_default_graph()
     network_architecture = \
         dict(n_hidden_recog_1=layer1, # 1st layer encoder neurons
              n_hidden_recog_2=layer2, # 2nd layer encoder neurons
              n_hidden_gener_1=data_tr.shape[1], # 1st layer decoder neurons
              n_input=data_tr.shape[1], # MNIST data input (img shape: 28*28)
-             n_z=num_topics)  # dimensionality of latent space
+             n_z=num_topics,
+             keep_prob=keeping_prob,
+             z_batch_flag=z_batch_norm_flag,
+             beta_batch_flag=beta_batch_norm_flag,
+             phi_batch_flag=phi_batch_norm_flag
+             )  # dimensionality of latent space
     batch_size=bs
     learning_rate=eta
     return network_architecture,batch_size,learning_rate
@@ -74,7 +78,7 @@ def create_minibatch(data):
         yield data[ixs]
 
 
-def train(network_architecture, minibatches, type='prodlda',learning_rate=0.001,
+def train(network_architecture, minibatches, type='nvlda',learning_rate=0.001,
           batch_size=200, training_epochs=100, display_step=5):
     tf.reset_default_graph()
     vae=''
@@ -157,9 +161,10 @@ def main(argv):
     t = ''
     b = ''
     r = ''
+    k = ''
     e = ''
     try:
-      opts, args = getopt.getopt(argv,"hpnm:f:s:t:b:r:,e:",["default=","model=","layer1=","layer2=","num_topics=","batch_size=","learning_rate=","training_epochs"])
+      opts, args = getopt.getopt(argv,"hpnm:f:s:t:b:r:k:z:q:c:,e:",["default=","model=","layer1=","layer2=","num_topics=","batch_size=","keep_prob=","learning_rate=","z_batch_norm_flag","training_epochs"])
     except getopt.GetoptError:
         print ('CUDA_VISIBLE_DEVICES=0 python run.py -m <model> -f <#units> -s <#units> -t <#topics> -b <batch_size> -r <learning_rate [0,1] -e <training_epochs>')
         sys.exit(2)
@@ -199,13 +204,21 @@ def main(argv):
             b=int(arg)
         elif opt == "-r":
             r=float(arg)
+        elif opt == "-k":
+            k=float(arg)
+        elif opt == "-z":
+            z=int(arg)                        
+        elif opt == "-q":
+            q=int(arg)                
+        elif opt == "-c":
+            c=int(arg)                
         elif opt == "-e":
             e=int(arg)
 
     minibatches = create_minibatch(docs_tr.astype('float32'))
-    network_architecture,batch_size,learning_rate=make_network(f,s,t,b,r)
+    network_architecture,batch_size,learning_rate=make_network(layer1=f,layer2=s,num_topics=t,bs=b,eta=r,keeping_prob=k,z_batch_norm_flag=z,beta_batch_norm_flag=q,phi_batch_norm_flag=c)
     print (network_architecture)
-    print (opts)
+    # print (opts)
     vae,emb = train(network_architecture, minibatches,m, training_epochs=e,batch_size=batch_size,learning_rate=learning_rate)
     print_top_words(emb, list(zip(*sorted(vocab.items(), key=lambda x: x[1])))[0])
     calcPerp(vae)

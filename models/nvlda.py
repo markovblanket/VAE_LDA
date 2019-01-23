@@ -30,14 +30,19 @@ class VAE(object):
         self.learning_rate = learning_rate
         self.batch_size = batch_size
         self.epoch_count=0
+        self.z_batch_norm_flag=network_architecture['z_batch_flag']
+        self.beta_batch_norm_flag=network_architecture['beta_batch_flag']        
+        self.phi_batch_norm_flag=network_architecture['phi_batch_flag']        
+
         '''----------------Inputs----------------'''
         self.x = tf.placeholder(tf.float32, [None, network_architecture["n_input"]])
-        self.keep_prob = tf.placeholder(tf.float32)
+        # self.keep_prob = tf.placeholder(tf.float32)
+        self.keep_prob = float(network_architecture['keep_prob'])
 
         '''-------Constructing Laplace Approximation to Dirichlet Prior--------------'''
         self.h_dim = float(network_architecture["n_z"])
         self.h_dim = int(network_architecture["n_z"])
-        print('h_dim: ',self.h_dim)
+       # print('h_dim: ',self.h_dim)
         self.a = 1*np.ones((1 , self.h_dim)).astype(np.float32)
         self.mu2 = tf.constant((np.log(self.a).T-np.mean(np.log(self.a),1)).T)
         self.var2 = tf.constant(  ( ( (1.0/self.a)*( 1 - (2.0/self.h_dim) ) ).T +
@@ -70,7 +75,7 @@ class VAE(object):
 
     def _initialize_weights(self, n_hidden_recog_1, n_hidden_recog_2,
                             n_hidden_gener_1,
-                            n_input, n_z):
+                            n_input, n_z,keep_prob,z_batch_flag,beta_batch_flag,phi_batch_flag):
         all_weights = dict()
         all_weights['weights_recog'] = {
             'h1': tf.get_variable('h1',[n_input, n_hidden_recog_1]),
@@ -103,24 +108,52 @@ class VAE(object):
 
         layer_4 = self.transfer_fct(tf.add(tf.tensordot(layer_3, weights['phi2'],axes=((1),(0))),
                                            biases['phi2'])) 
-        print('layer_4_shape',layer_4.get_shape())
+        #print('layer_4_shape',layer_4.get_shape())
+
+        if (self.phi_batch_norm_flag):
+            self.phi=tf.nn.softmax(tf.contrib.layers.batch_norm(layer_4))
+            print ('-'*20)            
+            print('batch_norm for Phi Enabled')
+            print ('-'*20)
+        else :
+            self.phi=tf.nn.softmax(layer_4)
+            print ('-'*20)            
+            print('batch_norm for Phi Disabled')
+            print ('-'*20)
 
 
-        self.phi=tf.nn.softmax(layer_4)
-        print('new_phi',self.phi.get_shape())
+        #print('new_phi',self.phi.get_shape())
         layer_do = tf.nn.dropout(layer_2, self.keep_prob)
-
-        z_mean = tf.contrib.layers.batch_norm(tf.add(tf.matmul(layer_do, weights['out_mean']),
-                        biases['out_mean']))
-        z_log_sigma_sq =tf.contrib.layers.batch_norm(tf.add(tf.matmul(layer_do, weights['out_log_sigma']),biases['out_log_sigma']))
-
+        if (self.z_batch_norm_flag):
+            z_mean = tf.contrib.layers.batch_norm(tf.add(tf.matmul(layer_do, weights['out_mean']),
+                            biases['out_mean']))
+            z_log_sigma_sq =tf.contrib.layers.batch_norm(tf.add(tf.matmul(layer_do, weights['out_log_sigma']),biases['out_log_sigma']))
+            print ('-'*20)            
+            print('batch_norm for z Enabled')
+            print ('-'*20)
+        else:
+            z_mean = tf.add(tf.matmul(layer_do, weights['out_mean']),biases['out_mean'])
+            z_log_sigma_sq =tf.add(tf.matmul(layer_do, weights['out_log_sigma']),biases['out_log_sigma'])                        
+            print ('-'*20)            
+            print('batch_norm for z Disabled')
+            print ('-'*20)
         return (z_mean, z_log_sigma_sq)
 
     def _generator_network(self,z, weights):
         self.layer_do_0 = tf.nn.dropout(tf.nn.softmax(z), self.keep_prob)
         # '''sampled theta'''
         # self.theta_l=self.layer_do_0
-        self.beta=tf.nn.softmax(tf.contrib.layers.batch_norm(weights['h2']))       
+        if (self.beta_batch_norm_flag):
+            self.beta=tf.nn.softmax(tf.contrib.layers.batch_norm(weights['h2']))       
+            print ('-'*20)
+            print('batch_norm for beta Enabled')
+            print ('-'*20)            
+        else:
+            self.beta=tf.nn.softmax(weights['h2'])       
+            print ('-'*20)
+            print('batch_norm for beta Disabled')
+            print ('-'*20)
+
         x_reconstr_mean = tf.add(tf.matmul(self.layer_do_0, tf.nn.softmax(weights['h2'])),0.0)
         return x_reconstr_mean
 
@@ -130,11 +163,11 @@ class VAE(object):
         ''' E_{q(theta|w;mu_0,Sigma_0)q(z|w;phi)}[log p(z|theta)]'''        
         theta_expand=tf.expand_dims(self.layer_do_0,-1)+1e-10
         t_z_p_loss=tf.reduce_sum(tf.matmul(self.phi,tf.log(theta_expand)),[1,2])   
-        print ('t_z_p_loss',t_z_p_loss.get_shape())        
+       # print ('t_z_p_loss',t_z_p_loss.get_shape())        
 
         ''' E_q(z|w;phi)[log q(z|w;phi)]'''
         z_z_q_loss=tf.reduce_sum(self.phi*tf.log(self.phi),[1,2])
-        print ('z_z_q_loss',z_z_q_loss.get_shape())        
+        #print ('z_z_q_loss',z_z_q_loss.get_shape())        
 
         ''' E_{q(theta,z|w)}{log p(w|z,theta)}'''
         # reconstr_loss = -tf.reduce_sum(self.x * tf.log(self.x_reconstr_mean),1)#/tf.reduce_sum(self.x,1)
@@ -142,13 +175,13 @@ class VAE(object):
         # recons_loss=tf.reduce_sum(tf.multiply(self.x,tf.matrix_diag_part(tf.tensordot(self.phi,tf.log(self.beta),axes=((2),(0))))))
         recons_loss=tf.reduce_sum(tf.multiply(self.phi,tf.transpose(tf.log(self.beta))),2)
         recons_loss=tf.reduce_sum(self.x*recons_loss,1)
-        print ('reconstr_loss_mine',recons_loss.get_shape())
+        #print ('reconstr_loss_mine',recons_loss.get_shape())
         ''' E_{q(theta|w)}{log (p(theta|w)/q(theta|w))}'''             
         latent_loss = 0.5*( tf.reduce_sum(tf.div(self.sigma,self.var2),1)+\
         tf.reduce_sum( tf.multiply(tf.div((self.mu2 - self.z_mean),self.var2),
                   (self.mu2 - self.z_mean)),1) - self.h_dim +\
                            tf.reduce_sum(tf.log(self.var2),1)  - tf.reduce_sum(self.z_log_sigma_sq  ,1) )
-        print ('latent_loss',latent_loss.get_shape())
+       # print ('latent_loss',latent_loss.get_shape())
         # reconstr_loss = \
         #     -tf.reduce_sum(self.x * tf.log(self.x_reconstr_mean),1)#/tf.reduce_sum(self.x,1)
             
@@ -156,14 +189,14 @@ class VAE(object):
         # self.cost = tf.reduce_mean(reconstr_loss) + tf.reduce_mean(latent_loss) # average over batch
         # self.cost = tf.reduce_mean(-self.recons_loss-self.t_z_p_loss+self.z_z_q_loss) + tf.reduce_mean(latent_loss) # average over batch
 
-        self.cost = tf.reduce_mean(-recons_loss-t_z_p_loss+z_z_q_loss+latent_loss) # average over batch
-        # self.cost=tf.reduce_mean(latent_loss)
+        # self.cost = tf.reduce_mean(-recons_loss-t_z_p_loss+z_z_q_loss+latent_loss) # average over batch
+        self.cost=tf.reduce_mean(latent_loss)
 
         self.optimizer = \
             tf.train.AdamOptimizer(learning_rate=self.learning_rate,beta1=0.99).minimize(self.cost)
 
     def partial_fit(self, X):                
-        opt, cost,emb = self.sess.run((self.optimizer, self.cost,self.network_weights['weights_gener']['h2']),feed_dict={self.x: X,self.keep_prob: .75})
+        opt, cost,emb = self.sess.run((self.optimizer, self.cost,self.network_weights['weights_gener']['h2']),feed_dict={self.x: X})
         # print('trace_monitor',trace_monitor)        
         # self.sess.run((self.layer_3_print),feed_dict={self.x: X,self.keep_prob: .75})
         return cost,emb
