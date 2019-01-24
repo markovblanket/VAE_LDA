@@ -33,11 +33,11 @@ class VAE(object):
         self.z_batch_norm_flag=network_architecture['z_batch_flag']
         self.beta_batch_norm_flag=network_architecture['beta_batch_flag']        
         self.phi_batch_norm_flag=network_architecture['phi_batch_flag']        
-
+	self.prob=float(network_architecture['keep_prob'])
         '''----------------Inputs----------------'''
         self.x = tf.placeholder(tf.float32, [None, network_architecture["n_input"]])
-        # self.keep_prob = tf.placeholder(tf.float32)
-        self.keep_prob = float(network_architecture['keep_prob'])
+        self.keep_prob = tf.placeholder(tf.float32)
+#        self.keep_prob = float(network_architecture['keep_prob'])
 
         '''-------Constructing Laplace Approximation to Dirichlet Prior--------------'''
         self.h_dim = float(network_architecture["n_z"])
@@ -189,21 +189,20 @@ class VAE(object):
         # self.cost = tf.reduce_mean(reconstr_loss) + tf.reduce_mean(latent_loss) # average over batch
         # self.cost = tf.reduce_mean(-self.recons_loss-self.t_z_p_loss+self.z_z_q_loss) + tf.reduce_mean(latent_loss) # average over batch
 
-        # self.cost = tf.reduce_mean(-recons_loss-t_z_p_loss+z_z_q_loss+latent_loss) # average over batch
-        self.cost=tf.reduce_mean(latent_loss)
+        self.cost = tf.reduce_mean(-recons_loss-t_z_p_loss+z_z_q_loss+latent_loss) # average over batch
+       # self.cost=tf.reduce_mean(latent_loss)
 
         self.optimizer = \
             tf.train.AdamOptimizer(learning_rate=self.learning_rate,beta1=0.99).minimize(self.cost)
 
     def partial_fit(self, X):                
-        opt, cost,emb = self.sess.run((self.optimizer, self.cost,self.network_weights['weights_gener']['h2']),feed_dict={self.x: X})
+        opt, cost,emb = self.sess.run((self.optimizer, self.cost,self.network_weights['weights_gener']['h2']),feed_dict={self.x: X,self.keep_prob:self.prob})
         # print('trace_monitor',trace_monitor)        
         # self.sess.run((self.layer_3_print),feed_dict={self.x: X,self.keep_prob: .75})
         return cost,emb
 
     def test(self, X):
-        cost = self.sess.run((self.cost),
-                                        feed_dict={self.x: np.expand_dims(X, axis=0),self.keep_prob: 1.0})
+        cost = self.sess.run((self.cost),feed_dict={self.x: np.expand_dims(X, axis=0),self.keep_prob:1.0})
         return cost
     def topic_prop(self, X):
         """heta_ is the topic proportion vector. Apply softmax transformation to it before use.
