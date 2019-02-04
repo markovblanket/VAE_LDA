@@ -12,16 +12,31 @@ dataset_tr = 'data/20news_clean/train.txt.npy'
 data_tr = np.load(dataset_tr, encoding = 'latin1')
 vocab_content= np.load(vocab, encoding = 'latin1')
 mydict = {'george':16,'amber':19}
-doc_len=[len(data_tr[k]) for k in range(len(data_tr))]
+doc_len=[len(data_tr[k]) for k in range(10)]
 vocab_size=len(vocab_content)
-
+data_tr=data_tr[0:200]
+#data_tr = np.array([np.diag(onehot(doc.astype('int'),vocab_size)) for doc in data_tr if np.sum(doc)!=0])
 data_tr = np.array([onehot(doc.astype('int'),vocab_size) for doc in data_tr if np.sum(doc)!=0])
-
+non_zero_vec=np.array([np.count_nonzero(data_tr[k,:]) for k in range(len(data_tr))])
+print('non_zero_vec',non_zero_vec)
+print ('min is ',np.min(non_zero_vec),' max is ', np.max(non_zero_vec))
+print(np.count_nonzero(data_tr[0,:]))
+print('data_tr',data_tr.shape)
+#print(data_tr[0])
 A=np.array([1,2,3])
 B=np.array([[1,2,1],[2,3,5],[4,5,6]])
+D=np.reshape(B,[9,])
+print D
+
 vec_1=tf.constant([[[1,1,1],[2,2,2]],[[3,3,3],[4,5,1]]], dtype=tf.float32)
 vec_2=tf.constant([[2,1,1]],dtype=tf.float32)
 vec_3=tf.constant([[3,2,4]],dtype=tf.float32)
+diag_mat=np.diag(data_tr)
+print('diag_mat_shape',diag_mat.shape)
+C=np.empty([200,1995,1995])
+#for k in range(200):
+#    C[k]=np.diag(data_tr[k])
+#print ('C_size is', C.shape)
 # print('A',A)
 # print('B',B)
 # print ('multiply',np.multiply(A,np.diag(B)))
