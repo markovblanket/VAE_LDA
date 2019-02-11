@@ -1,0 +1,32 @@
+(lp0
+S'write one article get use like know say people think'
+p1
+aS'one get say write think people go know article like'
+p2
+aS'use file program window available system version image run software'
+p3
+aS'write one get article say know think people go like'
+p4
+aS'write one get article think say know make people go'
+p5
+aS'write one get article say know people like think make'
+p6
+aS'drive write use get one article go know work thanks'
+p7
+aS'one write say get make people article know think go'
+p8
+aS'write one get article say know people like use make'
+p9
+aS'one say write people go think article know get make'
+p10
+aS'write one say get think go make use people article'
+p11
+aS'write one say people article know like get think make'
+p12
+aS'write one get article know say go make use people'
+p13
+aS'one write say get know go article think like make'
+p14
+aS'write one article get make say use like know go'
+p15
+a.

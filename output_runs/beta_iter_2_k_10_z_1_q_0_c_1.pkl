@@ -1,0 +1,22 @@
+(lp0
+S'write one use get say article know people make go'
+p1
+aS'write one use get article say know people like make'
+p2
+aS'write one use get say know article people go think'
+p3
+aS'write one use get say article know people go make'
+p4
+aS'write one use get say article know go people like'
+p5
+aS'write one use get article say know people make like'
+p6
+aS'write one use get say article know people go think'
+p7
+aS'write one use get say article know people go like'
+p8
+aS'write one use get article say know people like go'
+p9
+aS'write one use get say article know people go like'
+p10
+a.

@@ -36,7 +36,11 @@ class VAE(object):
 	self.prob=float(network_architecture['keep_prob'])
         '''----------------Inputs----------------'''
         self.x = tf.placeholder(tf.float32, [None, network_architecture["n_input"]])
+        #self.x_expand=tf.expand_dims(self.x,-1)
         self.keep_prob = tf.placeholder(tf.float32)
+	self.x_indicator=tf.placeholder(tf.float32,[None,network_architecture["n_input"]],name='x_indicator')
+	self.y_indicator=tf.expand_dims(self.x_indicator,-1)
+	self.x_expand=tf.expand_dims(self.x,-1)
 #        self.keep_prob = float(network_architecture['keep_prob'])
 
         '''-------Constructing Laplace Approximation to Dirichlet Prior--------------'''
@@ -83,6 +87,7 @@ class VAE(object):
             'out_mean': tf.get_variable('out_mean',[n_hidden_recog_2, n_z]),
             'phi1': tf.get_variable('phi1',[n_input,5]),                        
             # 'phi2': tf.Variable(tf.zeros([n_input,n_input,n_z], dtype=tf.float32)),            
+	    #'phi':tf.get_variable('phi',[1,n_z]),
             'phi2': tf.get_variable('phi2',[5,n_input,n_z]),
             'out_log_sigma': tf.get_variable('out_log_sigma',[n_hidden_recog_2, n_z])}
         all_weights['biases_recog'] = {
@@ -91,7 +96,8 @@ class VAE(object):
             'out_mean': tf.Variable(tf.zeros([n_z], dtype=tf.float32)),
             'phi1': tf.Variable(tf.zeros([5], dtype=tf.float32)),
             'phi2': tf.Variable(tf.zeros([n_input,n_z], dtype=tf.float32)),
-            'out_log_sigma': tf.Variable(tf.zeros([n_z], dtype=tf.float32))}
+            #'phi':tf.Variable(tf.zeros([n_z]),dtype=tf.float32),
+	    'out_log_sigma': tf.Variable(tf.zeros([n_z], dtype=tf.float32))}
         all_weights['weights_gener'] = {
             'h2': tf.Variable(xavier_init(n_z, n_hidden_gener_1))}
         return all_weights
@@ -107,7 +113,8 @@ class VAE(object):
                                            biases['phi1']))
 
         layer_4 = self.transfer_fct(tf.add(tf.tensordot(layer_3, weights['phi2'],axes=((1),(0))),
-                                           biases['phi2'])) 
+                                           biases['phi2']))
+	#layer_4=self.transfer_fct(tf.add(tf.tensordot(self.x_expand,weights['phi'],axes=((-1),(0))),biases['phi'])) 
         #print('layer_4_shape',layer_4.get_shape())
 
         if (self.phi_batch_norm_flag):
@@ -162,11 +169,13 @@ class VAE(object):
         self.phi+=1e-10
         ''' E_{q(theta|w;mu_0,Sigma_0)q(z|w;phi)}[log p(z|theta)]'''        
         theta_expand=tf.expand_dims(self.layer_do_0,-1)+1e-10
-        t_z_p_loss=tf.reduce_sum(tf.matmul(self.phi,tf.log(theta_expand)),[1,2])   
+#	print ('t_z_p_dimension',tf.matmul (self.phi,tf.log(theta_expand)).get_shape())
+        t_z_p_loss=tf.reduce_sum(self.x_expand*tf.matmul(self.phi,tf.log(theta_expand)),[1,2])   
        # print ('t_z_p_loss',t_z_p_loss.get_shape())        
 
         ''' E_q(z|w;phi)[log q(z|w;phi)]'''
-        z_z_q_loss=tf.reduce_sum(self.phi*tf.log(self.phi),[1,2])
+	print('z_z_q_loss',tf.reduce_sum(self.phi*tf.log(self.phi),axis=-1))
+        z_z_q_loss=tf.reduce_sum(self.x_expand*tf.expand_dims(tf.reduce_sum(self.phi*tf.log(self.phi),axis=-1),axis=-1),axis=[1,2])
         #print ('z_z_q_loss',z_z_q_loss.get_shape())        
 
         ''' E_{q(theta,z|w)}{log p(w|z,theta)}'''
@@ -190,22 +199,25 @@ class VAE(object):
         # self.cost = tf.reduce_mean(-self.recons_loss-self.t_z_p_loss+self.z_z_q_loss) + tf.reduce_mean(latent_loss) # average over batch
 
         self.cost = tf.reduce_mean(-recons_loss-t_z_p_loss+z_z_q_loss+latent_loss) # average over batch
-       # self.cost=tf.reduce_mean(latent_loss)
+#        self.cost=tf.reduce_mean(latent_loss-t_z_p_loss)
 
         self.optimizer = \
             tf.train.AdamOptimizer(learning_rate=self.learning_rate,beta1=0.99).minimize(self.cost)
 
-    def partial_fit(self, X):                
-        opt, cost,emb = self.sess.run((self.optimizer, self.cost,self.network_weights['weights_gener']['h2']),feed_dict={self.x: X,self.keep_prob:self.prob})
+    def partial_fit(self, X,X_indicator):                
+	#print('X_indicator',X_indicator.dtype)
+	#print('X',X.dtype)
+        opt, cost,emb = self.sess.run((self.optimizer, self.cost,self.network_weights['weights_gener']['h2']),feed_dict={self.x: X,self.x_indicator:X_indicator,self.keep_prob:self.prob})
         # print('trace_monitor',trace_monitor)        
         # self.sess.run((self.layer_3_print),feed_dict={self.x: X,self.keep_prob: .75})
         return cost,emb
 
-    def test(self, X):
-        cost = self.sess.run((self.cost),feed_dict={self.x: np.expand_dims(X, axis=0),self.keep_prob:1.0})
+    def test(self, X,X_indicator):
+#	print('X_validation_shape',X.shape)
+        cost = self.sess.run((self.cost),feed_dict={self.x: np.expand_dims(X, axis=0),self.x_indicator:np.expand_dims(X_indicator,axis=0),self.keep_prob:1.0})
         return cost
-    def topic_prop(self, X):
+    def topic_prop(self, X,X_indicator):
         """heta_ is the topic proportion vector. Apply softmax transformation to it before use.
         """
-        theta_ = self.sess.run((self.z),feed_dict={self.x: np.expand_dims(X, axis=0),self.keep_prob: 1.0})
+        theta_ = self.sess.run((self.z),feed_dict={self.x: np.expand_dims(X, axis=0),self.x_indicator:np.expand_dims(X_indicator,axis=0), self.keep_prob: 1.0})
         return theta_

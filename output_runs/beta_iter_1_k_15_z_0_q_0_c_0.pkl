@@ -1,0 +1,32 @@
+(lp0
+S'write article get one know think like go anyone thanks'
+p1
+aS'god say jesus christian people israel one see make man'
+p2
+aS'write one think know article get say go like people'
+p3
+aS'say one people know think go make see get like'
+p4
+aS'use power one get box need ground problem run work'
+p5
+aS'write get article one know use like anyone say go'
+p6
+aS'one say think know go people make write get like'
+p7
+aS'write one get article say think go know like people'
+p8
+aS'write article one know get say make like think go'
+p9
+aS'people one go say think know write get like make'
+p10
+aS'one write go people say think article know like make'
+p11
+aS'use file program drive system window card available run software'
+p12
+aS'write get article one like go know think time make'
+p13
+aS'write one get article like know make go think people'
+p14
+aS'write one say article think get know people go make'
+p15
+a.

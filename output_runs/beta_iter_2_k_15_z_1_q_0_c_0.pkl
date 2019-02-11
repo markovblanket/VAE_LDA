@@ -1,0 +1,32 @@
+(lp0
+S'write use one article get say know think go like'
+p1
+aS'write use one get article say like know think people'
+p2
+aS'one write use get say know article people like think'
+p3
+aS'write one use say get article know people like make'
+p4
+aS'write one use get say article know people make like'
+p5
+aS'play game team new first get go power year one'
+p6
+aS'write use one get say know article make people go'
+p7
+aS'write one use get article say know like think people'
+p8
+aS'one write use get article db say know people go'
+p9
+aS'write use one get say article know make think like'
+p10
+aS'write use one get article say people like know make'
+p11
+aS'write use one get say know article people make like'
+p12
+aS'write use one get say article people go think know'
+p13
+aS'write one use get know say article make like people'
+p14
+aS'write use one get article say know people make think'
+p15
+a.

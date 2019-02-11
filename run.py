@@ -29,8 +29,16 @@ vocab_size=len(vocab)
 #--------------convert to one-hot representation------------------
 print ('Converting data to one-hot representation')
 data_tr = np.array([onehot(doc.astype('int'),vocab_size) for doc in data_tr if np.sum(doc)!=0])
+data_tr_indicator=np.zeros(data_tr.shape).astype(np.float32)
+data_tr_indicator[data_tr!=0]=1.0
+print('data_tr_org',np.sum(data_tr[0]>0))
+print('data_tr_indicator',np.sum(data_tr_indicator[0]))
 data_te = np.array([onehot(doc.astype('int'),vocab_size) for doc in data_te if np.sum(doc)!=0])
+data_te_indicator=np.zeros(data_te.shape).astype(np.float32)
+data_te_indicator[data_te!=0.0]=1.0
 data_valid = np.array([onehot(doc.astype('int'),vocab_size) for doc in data_valid if np.sum(doc)!=0])
+data_valid_indicator=np.zeros(data_valid.shape).astype(np.float32)
+data_valid_indicator[data_valid!=0.0]=1.0
 #--------------print the data dimentions--------------------------
 print ('Data Loaded')
 print ('Dim Training Data',data_tr.shape)
@@ -44,6 +52,10 @@ n_samples_te = data_te.shape[0]
 docs_tr = data_tr
 docs_te = data_te
 docs_valid=data_valid
+
+docs_tr_indicator=data_tr_indicator
+docs_te_indicator=data_te_indicator
+docs_valid_indicator=data_valid_indicator
 #batch_size=200
 #learning_rate=0.002
 network_architecture = \
@@ -76,22 +88,23 @@ def make_network(layer1=100,layer2=100,num_topics=50,bs=200,eta=0.002,keeping_pr
 
 
 '''--------------Methods--------------'''
-def create_minibatch(data,batch_size):
+def create_minibatch(data,data_indicator,batch_size):
     rng = np.random.RandomState(10)
 
     while True:
         # Return random data samples of a size 'minibatch_size' at each iteration
         ixs = rng.randint(data.shape[0], size=batch_size)
-        yield data[ixs]
+        yield data[ixs],data_indicator[ixs]
 
 
 
 def calcPerpValid(model):
     cost=[]
-    for doc in docs_valid:
-        doc=doc.astype('float32')
+    for doc_n in range(docs_valid.shape[0]):
+        doc=docs_valid[doc_n].astype('float32')
+	doc_indicator=docs_valid_indicator[doc_n]
         n_d=np.sum(doc)
-        c=model.test(doc)
+        c=model.test(doc,doc_indicator)
         cost.append(c/n_d)
         ppx=np.exp(np.mean(np.array(cost)))
     return ppx
@@ -132,10 +145,14 @@ def train(network_architecture, minibatches, type='nvlda',learning_rate=0.001,
         # Loop over all batches
         for i in range(total_batch):
             # batch_xs = minibatches.next()
-            batch_xs = next(minibatches)
+            batch_xs,batch_xs_indicator = next(minibatches)
+	    #batch_xs_indicator=np.zeros(batch_xs.shape)
+	   # batch_xs_indicator[0,1,1]=1.0
+#	    print('batch_indicator',batch_xs_indicator.shape)
+#	    print('batch_xs',batch_xs.shape)
 #            print('batch_xs_shape:',batch_xs.shape)
             # Fit training using batch data
-            cost,emb = vae.partial_fit(batch_xs)
+            cost,emb = vae.partial_fit(batch_xs,batch_xs_indicator.astype(np.float32))
             # Compute average loss
             avg_cost += cost / n_samples_tr * batch_size
 
@@ -173,10 +190,11 @@ def print_top_words(beta, feature_names, n_top_words=10,name_beta=" "):
 
 def calcPerp(model,name_test):
     cost=[]
-    for doc in docs_te:
-        doc = doc.astype('float32')
+    for doc_n in range(docs_te.shape[0]):
+        doc = docs_te[doc_n].astype('float32')
+	doc_indicator=docs_te_indicator[doc_n]
         n_d = np.sum(doc)
-        c=model.test(doc)
+        c=model.test(doc,doc_indicator)
         cost.append(c/n_d)
     print ('The approximated perplexity is: ',(np.exp(np.mean(np.array(cost)))))
     test_ppx=np.exp(np.mean(np.array(cost)))
@@ -265,7 +283,7 @@ def main(argv):
 #    print('minibatches',minibatches.shape)
     network_architecture,batch_size,learning_rate=make_network(layer1=f,layer2=s,num_topics=t,bs=b,eta=r,keeping_prob=k,z_batch_norm_flag=z,beta_batch_norm_flag=q,phi_batch_norm_flag=c)
     print (network_architecture)
-    minibatches = create_minibatch(docs_tr.astype('float32'),batch_size=batch_size)
+    minibatches = create_minibatch(docs_tr.astype('float32'),docs_tr_indicator.astype('float32'),batch_size=batch_size)
     # print (opts)
     vae,emb,name_beta = train(network_architecture, minibatches,m, training_epochs=e,batch_size=batch_size,learning_rate=learning_rate,iter_count=i)
     print_top_words(emb, list(zip(*sorted(vocab.items(), key=lambda x: x[1])))[0],name_beta=name_beta)

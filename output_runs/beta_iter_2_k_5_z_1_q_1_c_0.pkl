@@ -1,0 +1,12 @@
+(lp0
+S'game player play pitch stats playoff fan score baseball team'
+p1
+aS'sin bible god belief biblical christianity doctrine morality church truth'
+p2
+aS'windows pc graphic display printer motherboard card microsoft screen interface'
+p3
+aS'village arab border israel lebanon arabs israeli army lebanese armenia'
+p4
+aS'encryption clipper crypto escrow enforcement agency privacy nsa wiretap industry'
+p5
+a.

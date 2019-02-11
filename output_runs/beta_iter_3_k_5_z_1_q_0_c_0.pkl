@@ -1,0 +1,12 @@
+(lp0
+S'write one get use article say know think like go'
+p1
+aS'use one get write say know article go like make'
+p2
+aS'write one use article get know say people think like'
+p3
+aS'write one use get say article know people like make'
+p4
+aS'one write use get say know article go make think'
+p5
+a.

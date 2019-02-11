@@ -1,0 +1,22 @@
+(lp0
+S'write article like know use one make think get want'
+p1
+aS'use get anyone thanks please work know need like look'
+p2
+aS'say go one come people see know take kill happen'
+p3
+aS'get car drive much go one buy problem back driver'
+p4
+aS'year game team play go last win first new player'
+p5
+aS'use file program system window available datum space software version'
+p6
+aS'one say people think make thing may believe question also'
+p7
+aS'one make thing people question know say way many post'
+p8
+aS'write think article make like one know see time go'
+p9
+aS'god people christian jesus believe life man say israel claim'
+p10
+a.

@@ -1,0 +1,102 @@
+(lp0
+S'read current design test error put limit process load us'
+p1
+aS'another line keep support change end mark example simply text'
+p2
+aS'game year team win fan baseball playoff last toronto leafs'
+p3
+aS'really actually happen nothing buy least turn possible rather perhaps'
+p4
+aS'much law however name member concern child involve rights follow'
+p5
+aS'think look come far hope obviously nobody spend absolutely basically'
+p6
+aS'armenia armenian three armenians turks population escape fight road month'
+p7
+aS'information apple upgrade mode pc message offer mac color contain'
+p8
+aS'david act mind small sense city later four thousand study'
+p9
+aS'thing first claim show state result assume similar suggest lead'
+p10
+aS'university long john yes hand ever whether position head face'
+p11
+aS'computer technology hear card federal today policy department american bill'
+p12
+aS'reason consider real country exist old fire already willing outside'
+p13
+aS'key phone clipper escrow mail encryption algorithm secure serial voice'
+p14
+aS'use people actual printer bug popular possibly modify properly hint'
+p15
+aS'bike week mike ride steve news money april bmw motorcycle'
+p16
+aS'run email user provide address access via ftp public site'
+p17
+aS'machine pretty wonder screen watch simple systems ok hey jim'
+p18
+aS'go take file system wide perform title match larry room'
+p19
+aS'car help experience anyway moral delete front oh fine morality'
+p20
+aS'two still man live start kill word little soul hundred'
+p21
+aS'always die death hit pass cut fall bob body behind'
+p22
+aS'new gun fact weapon crime carry rate compare likely require'
+p23
+aS'opinion talk feel matter truth friend bear mine decide view'
+p24
+aS'software application display server space directory graphic version code package'
+p25
+aS'know need point box connect tube connection voltage select feed'
+p26
+aS'god say christian christ bible faith church christianity religion sin'
+p27
+aS'idea someone big sell chip remember either suppose yet clinton'
+p28
+aS'number price scsi ask power disk call hard mb bus'
+p29
+aS'day every must become course several term care especially clear'
+p30
+aS'like well back bit move ahead sick spring push floor'
+p31
+aS'cost order able area large per radio full interest project'
+p32
+aS'dod sorry light michael maybe effect mile condition disclaimer frank'
+p33
+aS'bad hold away answer understand couple driver stand shoot almost'
+p34
+aS'find give believe something lot different evidence correct knowledge imply'
+p35
+aS'one time even try blame mask weak possibility absolutely shut'
+p36
+aS'may sure tell since better great quite kind less instead'
+p37
+aS'question government true issue cause human statement base argument purpose'
+p38
+aS'probably around anything guess book sound device nice bank business'
+p39
+aS'get way mean level touch honda reading noise imagine transmission'
+p40
+aS'never case post life else though create individual basis society'
+p41
+aS'article program available list nasa engineering tony orbit earth shuttle'
+p42
+aS'thanks hus appreciate windows advance motherboard monitor video memory ram'
+p43
+aS'work good many enough soon gordon completely refer personally event'
+p44
+aS'player play score season please pittsburgh rangers san chicago goal'
+p45
+aS'write problem want window button crash fix drink root wm'
+p46
+aS'israel israeli arab land peace force arabs attack jews village'
+p47
+aS'drive right might open world input left bar eric appear'
+p48
+aS'next note pay high wrong copy company side add low'
+p49
+aS'make see also eventually huge discover surely previously nation complex'
+p50
+a.

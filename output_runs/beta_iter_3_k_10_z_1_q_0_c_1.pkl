@@ -1,0 +1,22 @@
+(lp0
+S'write file use get one program article output know like'
+p1
+aS'write use one get article like know say think make'
+p2
+aS'say one go people write know get think use see'
+p3
+aS'one use say write get go know people article make'
+p4
+aS'write one use get article know say make like think'
+p5
+aS'write one use get article say know play new make'
+p6
+aS'use write one get article make db know say like'
+p7
+aS'write one use get article know say make like think'
+p8
+aS'write one use get article know say make like people'
+p9
+aS'write one get use article know say make like think'
+p10
+a.

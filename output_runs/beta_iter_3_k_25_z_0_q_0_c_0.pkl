@@ -1,0 +1,52 @@
+(lp0
+S'write one use get know go say like make think'
+p1
+aS'write one get article say use know people think like'
+p2
+aS'write one article get know say use think make like'
+p3
+aS'write one article get say people think know use go'
+p4
+aS'write one article get use make like say know go'
+p5
+aS'one write people say know article get use go think'
+p6
+aS'write use one article get like know think say people'
+p7
+aS'write one say get article people go think make know'
+p8
+aS'write one get use article say know go like people'
+p9
+aS'write one article get say know think use people like'
+p10
+aS'file use program window drive system image available version software'
+p11
+aS'db write one get say article know people go like'
+p12
+aS'one write get article say know people like use think'
+p13
+aS'write one article get say think know people use like'
+p14
+aS'write one say people article get know make think use'
+p15
+aS'write one get say article people know use go think'
+p16
+aS'write one get use say article know people think like'
+p17
+aS'write one get use article know people say make go'
+p18
+aS'write one article get know use say think make go'
+p19
+aS'write one article get say know think make people go'
+p20
+aS'one write use say get know article make like think'
+p21
+aS'one write get say article use make go know like'
+p22
+aS'write one get say article use know people go make'
+p23
+aS'win write van one la say get use know go'
+p24
+aS'write get one article like go know use say think'
+p25
+a.

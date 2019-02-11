@@ -1,0 +1,52 @@
+(lp0
+S'use system run window file version unix directory please modem'
+p1
+aS'bible faith claim israel christ religion truth christianity belief evidence'
+p2
+aS'wonder old mine friend oh robert tv bob air wait'
+p3
+aS'think say article see something tell talk way exactly put'
+p4
+aS'email application mail info server mouse computer faq site function'
+p5
+aS'people god believe church take sin die person word state'
+p6
+aS'go thing well come even still lot might newspaper find'
+p7
+aS'drive card know hus hear windows hard disk fine setup'
+p8
+aS'game play team win score playoff player season rangers goal'
+p9
+aS'thanks software graphic pc fax color video mac display port'
+p10
+aS'key like one escrow algorithm time clipper encryption secure number'
+p11
+aS'year world man opinion john force great member become question'
+p12
+aS'good give really much best day never ever keep minute'
+p13
+aS'write get make anyway stupid jim delete bother greg tim'
+p14
+aS'memory apple mode ram meg appreciate scsi ide bus mhz'
+p15
+aS'bike enough maybe ride guy mike hit night real front'
+p16
+aS'government chip new security law legal nsa court illegal authority'
+p17
+aS'cost case pay nice high supply worth company amount switch'
+p18
+aS'car us science flight research university engine nasa national orbit'
+p19
+aS'work problem help information include send available address set name'
+p20
+aS'group right commit society turks citizen child reason criminal american'
+p21
+aS'nothing david though quite understand book mind simply pretty live'
+p22
+aS'hope side black white stop hold fan week likely perhaps'
+p23
+aS'phone also design device access require datum systems voice space'
+p24
+aS'armenia armenian road money chicago turkish washington toronto pittsburgh angeles'
+p25
+a.

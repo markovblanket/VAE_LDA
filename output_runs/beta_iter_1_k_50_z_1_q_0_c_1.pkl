@@ -1,0 +1,102 @@
+(lp0
+S'write one use get say article know people make like'
+p1
+aS'write one use get say article know make people like'
+p2
+aS'write one use get say article know people make go'
+p3
+aS'write one use get say article know people make like'
+p4
+aS'write one use get say article know people make go'
+p5
+aS'write one use get say article know people like make'
+p6
+aS'write one use get say article know people make like'
+p7
+aS'write one use get say article know people go make'
+p8
+aS'write one use get say article know people make go'
+p9
+aS'write one use get say article know people like make'
+p10
+aS'write one use get say article know make people like'
+p11
+aS'write one use get say article know people make like'
+p12
+aS'write one use get say article know people make go'
+p13
+aS'write one use get say article know people make go'
+p14
+aS'write one use get say article know people make go'
+p15
+aS'write one use get say article know people go make'
+p16
+aS'write one use get say article know people make like'
+p17
+aS'write one use get say article know people go make'
+p18
+aS'write one use get say article know people make go'
+p19
+aS'write one use get say article know people make like'
+p20
+aS'write one use get say article know people make like'
+p21
+aS'write one use get say article know people make like'
+p22
+aS'write one use get say article know people like make'
+p23
+aS'write one use get say article know make people like'
+p24
+aS'write one use get say article know people make like'
+p25
+aS'write one use get say article know people make go'
+p26
+aS'write one use get say article know people make go'
+p27
+aS'write one use get say article know people make like'
+p28
+aS'write one use get say article know people make like'
+p29
+aS'write one use get say article know people make go'
+p30
+aS'write one use get say article know people make like'
+p31
+aS'write one use get say article know people like make'
+p32
+aS'write one use get say article know people make like'
+p33
+aS'write one use get say article know people go make'
+p34
+aS'write one use get say article know people like make'
+p35
+aS'write one use get say article know people like make'
+p36
+aS'write one use get say article know people make like'
+p37
+aS'write one use get say article know people make like'
+p38
+aS'write one use get say article know people make like'
+p39
+aS'write one use get say article know people make go'
+p40
+aS'write one use get say article know people make like'
+p41
+aS'write one use get say article know people make like'
+p42
+aS'write one use get say article know people make like'
+p43
+aS'write one use get say article know people make go'
+p44
+aS'write one use get say article know people go make'
+p45
+aS'write one use get say article know people go like'
+p46
+aS'write one use get say article know people make like'
+p47
+aS'write one use get say article know people make like'
+p48
+aS'write one use get say article know make people go'
+p49
+aS'write one use get say article know people make like'
+p50
+a.

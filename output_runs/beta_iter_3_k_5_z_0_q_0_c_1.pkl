@@ -1,0 +1,12 @@
+(lp0
+S'write one people say get make know think go like'
+p1
+aS'write one article get know think make year like time'
+p2
+aS'write article one get say go think like make people'
+p3
+aS'know say one get go like think people make time'
+p4
+aS'use file system program run include information get available window'
+p5
+a.

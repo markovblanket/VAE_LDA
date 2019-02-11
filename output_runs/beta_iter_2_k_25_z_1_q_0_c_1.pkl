@@ -1,0 +1,52 @@
+(lp0
+S'write one use get article say know people make go'
+p1
+aS'write one use get article say know people make go'
+p2
+aS'write one use get article say know people make like'
+p3
+aS'write one use get article say know people make go'
+p4
+aS'write one use get article say know people like make'
+p5
+aS'write one use get article say know people go like'
+p6
+aS'write one use get say article know make people go'
+p7
+aS'write one use get article say know people make go'
+p8
+aS'write one use get article say know people go make'
+p9
+aS'write one use get article say know people make like'
+p10
+aS'write one use get article say know people make go'
+p11
+aS'write one use get article say know people make go'
+p12
+aS'write one use get article say know people make go'
+p13
+aS'write one use get article say know people make go'
+p14
+aS'write one use get article say know make people go'
+p15
+aS'write one use get article say know people go make'
+p16
+aS'write one use get article say know people make go'
+p17
+aS'write one use get article say know people make go'
+p18
+aS'write one use get say article know people make go'
+p19
+aS'write one use get article say know people make go'
+p20
+aS'write one use get say article know people go make'
+p21
+aS'write one use get say article know people make go'
+p22
+aS'write one use get article say know people make like'
+p23
+aS'write one use get article say know people make go'
+p24
+aS'write one use get article say know people make go'
+p25
+a.

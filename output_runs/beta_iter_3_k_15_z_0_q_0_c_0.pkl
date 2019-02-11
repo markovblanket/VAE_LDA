@@ -1,0 +1,32 @@
+(lp0
+S'god say people one think write know make see christian'
+p1
+aS'drive use problem get work write system one anyone like'
+p2
+aS'game team play year go player win get first new'
+p3
+aS'write article one say people know get think go like'
+p4
+aS'new war one know time say make like people secret'
+p5
+aS'write one think say get article people know make go'
+p6
+aS'say one write get go article people come think know'
+p7
+aS'use file program window system available software include version datum'
+p8
+aS'use need power one box get ground run current problem'
+p9
+aS'write get article one thanks know use like make anyone'
+p10
+aS'write one like article get know people think say use'
+p11
+aS'one make people write know say get article go like'
+p12
+aS'write article one get know say think like go people'
+p13
+aS'write article one think people say make get know like'
+p14
+aS'write article one people know say think make get like'
+p15
+a.

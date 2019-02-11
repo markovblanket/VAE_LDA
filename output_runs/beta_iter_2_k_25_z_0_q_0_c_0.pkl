@@ -1,0 +1,52 @@
+(lp0
+S'one write use get say know go article people like'
+p1
+aS'write use one get article say know make like go'
+p2
+aS'write one use get article say know make people go'
+p3
+aS'write one use get article say know people make like'
+p4
+aS'write one use get say article know go people make'
+p5
+aS'write one use get article say know people make think'
+p6
+aS'write one use get say article know think people go'
+p7
+aS'write use one get say article know think make like'
+p8
+aS'write one use get article say know make people like'
+p9
+aS'write one use article get say people know like think'
+p10
+aS'write one use get say know article people make go'
+p11
+aS'write use one get article say know think make like'
+p12
+aS'write use one get article know say like make think'
+p13
+aS'write one use get say article know like people go'
+p14
+aS'write one use get article say know like make people'
+p15
+aS'write one use get article say know think like make'
+p16
+aS'write one use get say article know think like people'
+p17
+aS'one use write get say know article people go make'
+p18
+aS'write one use get say article know people go make'
+p19
+aS'write one use get article say know like go think'
+p20
+aS'write one use get article say know like make people'
+p21
+aS'write use one get article say know people think like'
+p22
+aS'write use one get say article know go make people'
+p23
+aS'write one use get article say know make people think'
+p24
+aS'one use write get say people go know article like'
+p25
+a.

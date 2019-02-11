@@ -1,0 +1,12 @@
+(lp0
+S'write one use get article say know people make like'
+p1
+aS'write one use get say article know go people like'
+p2
+aS'write one use get article say know people make like'
+p3
+aS'write one use get article say know people make like'
+p4
+aS'write one use get article say know people make like'
+p5
+a.

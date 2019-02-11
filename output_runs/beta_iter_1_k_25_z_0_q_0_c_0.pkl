@@ -1,0 +1,52 @@
+(lp0
+S'say god one people think make write know get use'
+p1
+aS'write article get use one like know make go say'
+p2
+aS'write use article get thanks like one anyone know please'
+p3
+aS'write article one think get like say make know use'
+p4
+aS'say go people one come kill know see woman take'
+p5
+aS'one get use write make like think know say people'
+p6
+aS'write article get one use know think make say like'
+p7
+aS'write use one article make get like say know work'
+p8
+aS'use one make get write people also know say system'
+p9
+aS'game team play year win player last go season hockey'
+p10
+aS'use db ground bit one wire switch cable connect install'
+p11
+aS'gun law file state weapon control government crime bill use'
+p12
+aS'write get article one use like know think say time'
+p13
+aS'one get write think make use say know article like'
+p14
+aS'write one use get article know like also think make'
+p15
+aS'write article one like get know use make think people'
+p16
+aS'write use one get like article know make think see'
+p17
+aS'write use one know get article think make like go'
+p18
+aS'use write one article know get like make people also'
+p19
+aS'write article use one get know like think make also'
+p20
+aS'write use one article get know make think also work'
+p21
+aS'use write get one article know like make think say'
+p22
+aS'people one use think get write make like say time'
+p23
+aS'write get article one use know make like think see'
+p24
+aS'file program line use output return write error build read'
+p25
+a.

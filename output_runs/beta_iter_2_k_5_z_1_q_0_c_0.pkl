@@ -1,0 +1,12 @@
+(lp0
+S'use drive one get system write like card know work'
+p1
+aS'write one article get know say use think make people'
+p2
+aS'write one use get say article know people make go'
+p3
+aS'write one get say article go use think know people'
+p4
+aS'write one article get say use people make like think'
+p5
+a.

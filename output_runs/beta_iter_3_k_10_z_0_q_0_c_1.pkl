@@ -1,0 +1,22 @@
+(lp0
+S'use file program window information available set include application system'
+p1
+aS'one write get say people make know go article like'
+p2
+aS'write article get one know think make go say like'
+p3
+aS'write article one like get know people go think say'
+p4
+aS'use drive thanks card get image system problem windows disk'
+p5
+aS'write article one think get like say make people know'
+p6
+aS'god one say write make get people know think see'
+p7
+aS'say one go know people think get take see come'
+p8
+aS'one get people write make think go know say like'
+p9
+aS'write article one get know think say go people make'
+p10
+a.

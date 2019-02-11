@@ -1,0 +1,52 @@
+(lp0
+S'play new power pt first use one write get period'
+p1
+aS'write one use get say article people know think go'
+p2
+aS'write one use get article know say make think go'
+p3
+aS'one write use get say article people know think like'
+p4
+aS'write one use get article say know think like people'
+p5
+aS'write one use get article say know people go make'
+p6
+aS'write use one get article say know like make go'
+p7
+aS'write one use get article say know make people like'
+p8
+aS'write one use get article say know people make like'
+p9
+aS'write one get use article say know go people like'
+p10
+aS'write use one get article say know like make go'
+p11
+aS'write one use get say article know go like people'
+p12
+aS'one write use get say know article think like people'
+p13
+aS'write one use get article say know people make think'
+p14
+aS'write one use get say article know people think like'
+p15
+aS'write use one get article say know people make think'
+p16
+aS'write one use get say know article like make people'
+p17
+aS'write one use get say article know people like make'
+p18
+aS'write one use get say article know think make people'
+p19
+aS'write one use get say article know people go make'
+p20
+aS'one use write get say article make know people like'
+p21
+aS'use write one get article know say make like people'
+p22
+aS'one write use get say article know people go make'
+p23
+aS'write use one get say article know like people make'
+p24
+aS'write one use get article say know go people think'
+p25
+a.

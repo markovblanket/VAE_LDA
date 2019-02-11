@@ -1,0 +1,32 @@
+(lp0
+S'display server windows window application directory ftp postscript graphic font'
+p1
+aS'drive boot plug fine crash noise price cheap problem condition'
+p2
+aS'human armenia population turks village armenians armenian sexual child turkish'
+p3
+aS'university interested anybody engineering company institute post phone research msg'
+p4
+aS'surrender bike gordon bmw hear guy couple motorcycle hey year'
+p5
+aS'government law rights citizen escrow state country criminal enforcement court'
+p6
+aS'people religion christianity christian discussion therefore whose discuss history word'
+p7
+aS'game baseball player stats fan team coach pitch roger season'
+p8
+aS'never enough compound hand employer dod sick really opinion damn'
+p9
+aS'card motherboard modem isa apple mhz quadra memory port simm'
+p10
+aS'cost sale flight car orbit ford engine shuttle station vehicle'
+p11
+aS'article write thing think wrong like know see take one'
+p12
+aS'god faith christ jesus sin believe jewish belief heaven evidence'
+p13
+aS'chicago boston toronto montreal pittsburgh york wings rangers louis stanley'
+p14
+aS'anyone want reply delete thanks lot quite please look someone'
+p15
+a.

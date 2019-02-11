@@ -1,0 +1,52 @@
+(lp0
+S'write one use get article say know people go like'
+p1
+aS'write one use get say know article people make like'
+p2
+aS'write one use get article say know make people think'
+p3
+aS'write one use get article say know think go people'
+p4
+aS'write one use get article say know people like make'
+p5
+aS'write one use get article say know like people go'
+p6
+aS'write one use get say know article make like think'
+p7
+aS'write one get use article say know think go like'
+p8
+aS'file team game play win player entry season program hockey'
+p9
+aS'write one use get article say know like think people'
+p10
+aS'write one use get article say know people make like'
+p11
+aS'write one use get say article know go people think'
+p12
+aS'write one use get say article know think people go'
+p13
+aS'write one use get article know say go like people'
+p14
+aS'write one use get article say know think go like'
+p15
+aS'write one use get article say know think like make'
+p16
+aS'write one use get say article know like think go'
+p17
+aS'write one use get article say know like make people'
+p18
+aS'write one get use article say know like think people'
+p19
+aS'write one use get article say know people go like'
+p20
+aS'write one use get say article know make like people'
+p21
+aS'write one use get article know say people go like'
+p22
+aS'one write db use get say article know people like'
+p23
+aS'one write use get article say like know people make'
+p24
+aS'write one use get say article know people make think'
+p25
+a.
